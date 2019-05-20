@@ -1,0 +1,589 @@
+<!doctype html>
+<html>
+
+
+<!-- Mirrored from www.chartjs.org/samples/latest/charts/line/basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 28 May 2018 22:43:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+	<title>Cambio Climate</title>
+	<script src="Chart.bundle.js"></script>
+	<script src="utils.js"></script>
+	<style>
+	canvas{
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+
+#divprinci {
+	widows: 90%;
+	height: 200px;
+	background-color:#72A0C1;
+-webkit-box-shadow: 5px 5px 15px 5px #000000; 
+box-shadow: 5px 5px 15px 5px #000000;
+}
+
+
+.btn {
+	width: 150px;
+  background: #37d934;
+  background-image: -webkit-linear-gradient(top, #37d934, #2980b9);
+  background-image: -moz-linear-gradient(top, #37d934, #2980b9);
+  background-image: -ms-linear-gradient(top, #37d934, #2980b9);
+  background-image: -o-linear-gradient(top, #37d934, #2980b9);
+  background-image: linear-gradient(to bottom, #37d934, #2980b9);
+  -webkit-border-radius: 60;
+  -moz-border-radius: 60;
+  border-radius: 60px;
+  text-shadow: 0px 1px 9px #666666;
+  -webkit-box-shadow: 0px 8px 12px #919191;
+  -moz-box-shadow: 0px 8px 12px #919191;
+  box-shadow: 0px 8px 12px #919191;
+  font-family: Arial;
+  color: #113059;
+  font-size: 25px;
+  padding: 10px 12px 10px 15px;
+  border: solid #1f628d 20px;
+  text-decoration: none;
+}
+
+.btn:hover {
+		width: 140px;
+  background: #b53128;
+  background-image: -webkit-linear-gradient(top, #b53128, #3498db);
+  background-image: -moz-linear-gradient(top, #b53128, #3498db);
+  background-image: -ms-linear-gradient(top, #b53128, #3498db);
+  background-image: -o-linear-gradient(top, #b53128, #3498db);
+  background-image: linear-gradient(to bottom, #b53128, #3498db);
+  text-decoration: none;
+}
+
+
+.demoFont {
+font-family: Georgia, serif;
+font-size: 12px;
+letter-spacing: 2px;
+word-spacing: 2px;
+color: #000000;
+font-weight: normal;
+text-decoration: none;
+font-style: italic;
+font-variant: small-caps;
+text-transform: none;
+text-shadow: 2px 2px 2px #1C6EA4;
+}
+
+.edit2 {
+color: #616161;
+background: #bababa;
+text-shadow: #e0e0e0 1px 1px 0;
+}
+
+
+
+.edit {
+   border-top: 1px solid #96d1f8;
+   background: #65a9d7;
+   background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7));
+   background: -webkit-linear-gradient(top, #3e779d, #65a9d7);
+   background: -moz-linear-gradient(top, #3e779d, #65a9d7);
+   background: -ms-linear-gradient(top, #3e779d, #65a9d7);
+   background: -o-linear-gradient(top, #3e779d, #65a9d7);
+   padding: 8px 16px;
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: white;
+   font-size: 15px;
+   font-family: Georgia, serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+.edit:hover {
+   border-top-color: #28597a;
+   background: #28597a;
+   color: #ccc;
+   }
+.edit:active {
+   border-top-color: #1b435e;
+   background: #1b435e;
+   }
+
+   .demoFont1 {
+font-family: Georgia, serif;
+font-size: 9px;
+letter-spacing: 2px;
+word-spacing: 2px;
+color: #000000;
+font-weight: 700;
+text-decoration: underline solid rgb(68, 68, 68);
+font-style: normal;
+font-variant: normal;
+text-transform: none;
+}
+
+	</style>
+</head>
+
+<body>
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<br>
+	<br>
+
+	<button  class ="btn" id="idnew" onclick="fnew()" >new </button>
+	<button class ="btn" onclick="caltemp()">calcular</button>
+	<button class ="btn" onclick="btcalco2()">Co2</button>
+
+	</script>
+<div  class ="demoFont "  id="divprinci">
+	
+tiempo :<input  class ="edit" type="text" id="ano" ><br>
+	arboles: <input class ="edit" type="text" id="perdida" >
+	CO2 valorado:<input class ="edit" type="text" id="co2" >
+
+	<p class ="demoFont" id="idtxto">valor </p>
+	<p  class ="demoFont" id="idtxto2" >temp </p><br>
+	<p  class ="demoFont1" id="idtxto3" >Desarrollado por ing giovanni ernesto rodriguez diaz Se prohibe su venta  </p>
+	<p  class ="demoFont1" id="idtxto3" >ing.giovanni.rodriguez@gmail.com </p>
+
+</div>
+	
+
+	<script >
+
+//http://www.wri.org/blog/2017/11/la-p%C3%A9rdida-de-cobertura-arb%C3%B3rea-mundial-ascendi%C3%B3-al-51-porcentaje-en-2016
+	var ano1="";	
+	var resultemp=0;
+	var resconcentr=0;
+	var vpoblacion =0;
+	var perdidadarb=0;
+	var vco2=0;
+	var tempconarbol=0;
+var  midatosT= [];
+var  midatosC= [];
+var  midatosP= [];
+
+
+		var ejexvalores= []
+
+	//caltemp();
+	/*	var  midatos= [
+						22.3,
+						
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor()
+					];*/
+
+					//caltemp();
+//, 'February111', 'March', 'April', 'May', 'June', 'July'];
+		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var config = {
+			type: 'line',
+			data: {
+				labels: ejexvalores,
+				datasets: [{
+					label: 'Temp Celcius',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data:midatosT,
+					fill: false,
+				}, {
+					label: 'CO2 PPM *10',
+					fill: false,
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: midatosC,
+				}
+				,{
+					label: 'Poblacion *1000 millones',
+					fill: false,
+					backgroundColor: window.chartColors.green,
+					borderColor: window.chartColors.green,
+					data:midatosP ,
+				}
+
+
+
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Cambio  climatico'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'años'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}]
+				}
+			}
+		};
+
+
+
+function  fnew(){
+
+	window.location.reload()
+;
+}
+
+
+
+
+
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		}
+
+		document.getElementById('randomizeData').addEventListener('click', function() {
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data = dataset.data.map(function() {
+					return randomScalingFactor();
+				});
+
+			});
+			alert(1);
+
+			window.myLine.update();
+		});
+
+		var colorNames = Object.keys(window.chartColors);
+		document.getElementById('addDataset').addEventListener('click', function() {
+			var colorName = colorNames[config.data.datasets.length % colorNames.length];
+			var newColor = window.chartColors[colorName];
+			var newDataset = {
+				label: 'Dataset ' + config.data.datasets.length,
+				backgroundColor: newColor,
+				borderColor: newColor,
+				data: [],
+				fill: false
+			};
+
+			for (var index = 0; index < config.data.labels.length; ++index) {
+				newDataset.data.push(randomScalingFactor());
+			}
+
+			config.data.datasets.push(newDataset);
+			window.myLine.update();
+		});
+
+		document.getElementById('addData').addEventListener('click', function() {
+			if (config.data.datasets.length > 0) {
+				var month = MONTHS[config.data.labels.length % MONTHS.length];
+				config.data.labels.push(month);
+
+				config.data.datasets.forEach(function(dataset) {
+					dataset.data.push(randomScalingFactor());
+				});
+
+				window.myLine.update();
+				
+			}
+		});
+
+		document.getElementById('removeDataset').addEventListener('click', function() {
+			config.data.datasets.splice(0, 1);
+			
+			window.myLine.update();
+		});
+
+		document.getElementById('removeData').addEventListener('click', function() {
+			config.data.labels.splice(-1, 1); // remove the label first
+
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.pop();
+			});
+		
+
+			window.myLine.update();
+		});
+
+
+
+var valorconcentracionarbol=0;
+
+function calco2(x){
+
+
+	return  3.009172655*Math.pow( 2.718281828,4.387759774/1000.00*x);
+}
+function btcalco2(){
+vco2=parseFloat(document.getElementById("co2").value);
+
+texto2(" temp calculada C "+calco2(vco2));
+	//return  3.009172655*Math.pow( 2.718281828,4.387759774/1000.00*x);
+}
+
+
+function una(ano12,perdidadarb2){
+resultemp=temp(ano12);
+
+valorconcentracionarbol=concentraperidida(perdidadarb2);
+
+ resconcentr=concetracion(ano12)+valorconcentracionarbol;
+
+//alert("temp "+ano1+"  concentracion  "+resconcentr);
+
+vpoblacion=fpoblacion(ano12);
+
+
+
+
+
+texto("temp "+ano1+"  concentracion   "+resconcentr+"  pobl  "+vpoblacion);
+
+}
+
+
+
+
+function concentraperidida(x){
+	var res=0;
+
+if(x>=0){
+  res= -6.9388939039072284e-018 * Math.pow(x,0)
+        +  5.5092307692302267e-001 * Math.pow(x,1)
+        + -2.3246153846151257e-001 * Math.pow(x,2)
+        +  2.7384615384612638e-002 * Math.pow(x,3);}
+        else{x=x*-1;
+res= (-6.9388939039072284e-018 * Math.pow(x,0)
+        +  5.5092307692302267e-001 * Math.pow(x,1)
+        + -2.3246153846151257e-001 * Math.pow(x,2)
+        +  2.7384615384612638e-002 * Math.pow(x,3))*-1;
+
+        }
+ return  res;
+
+}
+
+
+
+function caltemp(){
+
+ ano1=parseFloat(document.getElementById("ano").value);
+ perdidadarb=parseFloat(document.getElementById("perdida").value);
+ arboles=parseFloat(document.getElementById("perdida").value);
+una(ano1,perdidadarb);
+ for (var i=0 ;i<150;i=i+10){
+ 	
+resultemp=temp(ano1);
+midatosT.push(resultemp);
+
+ejexvalores.push(ano1);
+ resconcentr=concetracion(ano1);
+ midatosC.push(resconcentr/10);
+//alert("temp "+ano1+"  concentracion  "+resconcentr);
+
+vpoblacion=fpoblacion(ano1);
+midatosP.push(vpoblacion/1000000000);
+console.log("temp "+ano1+"  concentracion  "+resconcentr+"  pobl  "+vpoblacion+"   i   "+i);
+
+ano1=ano1+10;
+}
+
+//texto("temp "+ano1+"  concentracion  "+resconcentr+"  pobl  "+vpoblacion);
+
+
+
+rehacer();
+
+
+
+}
+function texto(st){
+	document.getElementById("idtxto").innerHTML = st;
+}
+function texto2(st){
+	document.getElementById("idtxto2").innerHTML = st;
+}
+var arboles=13;// millones de hectareas anual
+function temp(x) {
+   return -8.9046617924072461e+002 * Math.pow(x,0)
+        +  1.4565616030554740e+000 * Math.pow(x,1)
+        + -7.8802521760830218e-004 * Math.pow(x,2)
+        +  1.4298673044176581e-007 * Math.pow(x,3)+(0.025802469*x+-51.88518519)+(0.028542094*arboles-0.271047228);
+}
+
+function concetracion(x){  
+
+return 34.35126111*Math.pow( 2.718281828,1.17118721/1000.00*x);
+
+
+	/*return -1.3449649014019300e+005 * Math.pow(x,0)
+        +  1.3409982232371848e+002 * Math.pow(x,1)
+        + -3.3333288626150745e-002 * Math.pow(x,2.2);*/
+
+    }
+function hectsembra(){
+
+	
+}
+//http://www.xuru.org/rt/expr.asp
+
+function fpoblacion(x){
+
+
+return 712161.1923*Math.pow( 2.718281828,4.612882524/1000.00*x);
+
+
+
+/*
+	return 1.1799249247156334e+013 * Math.pow(x,0)
+        + -1.3526954704965218e+010 * Math.pow(x,1)
+        +  3.2790323085321803e+006 * Math.pow(x,2)
+        +  5.7623382786804461e+002 * Math.pow(x,3)
+        +  3.3129285131136221e-002 * Math.pow(x,4)
+        + -9.3601504405426160e-005 * Math.pow(x,5);*/
+
+
+/*
+   return -3.0417835889327480e+013 * Math.pow(x,0)
+        +  5.6466754261141418e+010 * Math.pow(x,1)
+        + -3.5323813832332514e+007 * Math.pow(x,2)
+        +  6.4102565650615707e+003 * Math.pow(x,3)
+        +  1.3454593343549131e+000 * Math.pow(x,4)
+        + -4.3824291640774963e-004 * Math.pow(x,5);*/
+
+
+
+}
+
+
+
+
+function rehacer(){
+
+	var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+
+	
+
+	
+			window.myLine.update();
+		
+
+
+document.getElementById('randomizeData').addEventListener('click', function() {
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data = dataset.data.map(function() {
+					return randomScalingFactor();
+				});
+
+			});
+		
+
+			window.myLine.update();
+		});
+
+		var colorNames = Object.keys(window.chartColors);
+		document.getElementById('addDataset').addEventListener('click', function() {
+			var colorName = colorNames[config.data.datasets.length % colorNames.length];
+			var newColor = window.chartColors[colorName];
+			var newDataset = {
+				label: 'Dataset ' + config.data.datasets.length,
+				backgroundColor: newColor,
+				borderColor: newColor,
+				data: [],
+				fill: false
+			};
+
+			for (var index = 0; index < config.data.labels.length; ++index) {
+				newDataset.data.push(randomScalingFactor());
+			}
+
+			config.data.datasets.push(newDataset);
+			window.myLine.update();
+		});
+
+		document.getElementById('addData').addEventListener('click', function() {
+			if (config.data.datasets.length > 0) {
+				var month = MONTHS[config.data.labels.length % MONTHS.length];
+				config.data.labels.push(month);
+
+				config.data.datasets.forEach(function(dataset) {
+					dataset.data.push(randomScalingFactor());
+				});
+
+				window.myLine.update();
+			
+			}
+		});
+
+		document.getElementById('removeDataset').addEventListener('click', function() {
+			config.data.datasets.splice(0, 1);
+		
+			window.myLine.update();
+		});
+
+		document.getElementById('removeData').addEventListener('click', function() {
+			config.data.labels.splice(-1, 1); // remove the label first
+
+			config.data.datasets.forEach(function(dataset) {
+				dataset.data.pop();
+			});
+	
+
+			window.myLine.update();
+		});
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+	</script>
+
+	
+
+	<script >
+
+
+ 
+//http://www.fao.org/docrep/ARTICLE/WFC/XII/0043-B2.HTM
+	</script>
+
+</body>
+
+
+<!-- Mirrored from www.chartjs.org/samples/latest/charts/line/basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 28 May 2018 22:43:21 GMT -->
+</html>
